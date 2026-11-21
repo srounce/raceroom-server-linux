@@ -9,14 +9,17 @@ docker build -t raceroom-server .
 docker run -d --name raceroom \
     -v raceroom-data:/data \
     -p 127.0.0.1:8088:8080 \
-    -p 27015-27017:27015-27017/udp -p 27015-27017:27015-27017/tcp \
+    -p 60000-60002:60000-60002/udp -p 60000-60002:60000-60002/tcp \
     raceroom-server
 ```
+
+The first start installs .NET Framework 4.8 into the Wine prefix, which takes
+a few minutes and brings the volume to about 3GB. Later starts take seconds.
 
 The web UI is then at http://localhost:8088. It has no authentication, so do
 not publish it on a public interface.
 
-Each game server created in the UI uses a UDP port, a UDP time port and TCP
-port + 1. Publish whichever ports you set there, the range above is an example.
+Each game server uses a UDP port, a UDP time port and TCP port + 1, starting
+at 60000 by default. The range above covers the first one.
 
 A bind mount used for `/data` must be writable by uid 1000.
